@@ -1,18 +1,19 @@
 {
-  "compilerOptions":
-    {
-      "target": "es6",
-      "module": "commonjs",
-      "outDir": "dist",
-      "esModuleInterop": true,
-      "lib": ["es6"],
-      "moduleResolution": "node",
-      "strict": true, 
-      "noEmitOnError": true,
-      "noImplicitAny": true,
-      "experimentalDecorators": true, // for typeorm
-      "emitDecoratorMetadata": true // for typeorm
-    },
+  "compilerOptions": {
+    "target": "es6",
+    "module": "commonjs",
+    "outDir": "dist",
+    "esModuleInterop": true,
+    "lib": ["es6"],
+    "moduleResolution": "node",
+    "strict": true,
+    "noEmitOnError": true,
+    "noImplicitAny": true,
+    "experimentalDecorators": true,
+    "emitDecoratorMetadata": true,
+    "skipLibCheck": true,
+    "forceConsistentCasingInFileNames": true
+  },
   "include": ["./src"],
-  "exclude": ["node_modules"],
+  "exclude": ["node_modules"]
 }
