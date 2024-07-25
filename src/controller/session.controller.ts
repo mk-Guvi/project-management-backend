@@ -32,7 +32,7 @@ export const accessTokenCookieOptions: CookieOptions = {
   httpOnly: true,
   domain,
   path: "/",
-  sameSite:"lax",
+  sameSite:"none",
   secure: isProduction, // true in production, false in development
 };
 
