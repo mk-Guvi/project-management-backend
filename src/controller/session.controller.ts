@@ -26,16 +26,16 @@ const isProduction = process.env?.NODE_ENV === "production";
 
 // Get the domain from environment variable, fallback to localhost
 const domain = process.env.COOKIE_DOMAIN || "localhost";
-console.log({domain})
+
 export const accessTokenCookieOptions: CookieOptions = {
   maxAge: 900000, // 15 mins
   httpOnly: true,
   domain,
   path: "/",
-  sameSite:"none",
+  sameSite:false,
   secure: isProduction, // true in production, false in development
 };
-
+console.log(accessTokenCookieOptions,"accessTokenCookieOptions")
 export const refreshTokenCookieOptions: CookieOptions = {
   ...accessTokenCookieOptions,
   maxAge: 3.154e10, // 1 year
