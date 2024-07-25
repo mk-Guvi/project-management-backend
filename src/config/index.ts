@@ -1,15 +1,23 @@
-import dotenv from 'dotenv';
+import dotenv from "dotenv";
 
 // Load environment variables from .env file
 dotenv.config();
 
 export default {
-  port: process.env.PORT ? parseInt(process.env.PORT) : 1337,
+  port: process.env.PORT || 1337,
   origin: process.env.ORIGIN || "http://localhost:3000",
+  baseUrl: process.env.BASE_URL || "http://localhost:1337",
   dbUri: process.env.DB_URI || "",
-  saltWorkFactor: process.env.SALT_WORK_FACTOR ? parseInt(process.env.SALT_WORK_FACTOR) : 10,
+  saltWorkFactor: Number(process.env.SALT_WORK_FACTOR) || 10,
   accessTokenTtl: process.env.ACCESS_TOKEN_TTL || "15m",
   refreshTokenTtl: process.env.REFRESH_TOKEN_TTL || "1y",
+  googleClientId: process.env.GOOGLE_CLIENT_ID,
+  googleClientSecret: process.env.GOOGLE_CLIENT_SECRET,
+  googleOauthRedirectUrl:
+    process.env.GOOGLE_OAUTH_REDIRECT_URL ||
+    "http://localhost:1337/api/sessions/oauth/google",
+  cookieDomain: process.env.COOKIE_DOMAIN || "localhost",
+  environment: process.env.NODE_ENV || "development",
   publicKey: `-----BEGIN PUBLIC KEY-----
 MIGfMA0GCSqGSIb3DQEBAQUAA4GNADCBiQKBgQCXzZerpx9qdaelwt1U7NCpWXQK
 km1OW4ohDF/7g01xDtYf8Nox9wzhhVQrFD+G4eaJoWxIhJYQTgT4ijMlpjXs07Mc
@@ -31,7 +39,4 @@ WeigleiFFBl85kvoMwZp2A4Z8EakMgX7fp0vCwYqgLLAsat0vHzJ3fiMd0g3T8Yg
 svPkdjt/qEIocryChqsCQGnInFDk9fC5C8G1Ez2N/p0WztoPDNKfYVDGZ8IRMjEy
 rPeH03CIhIoh6QPPg02GKC3VumQxgwOe2wkQ2OgHYLE=
 -----END RSA PRIVATE KEY-----`,
-  googleClientId: process.env.GOOGLE_CLIENT_ID || "",
-  googleClientSecret: process.env.GOOGLE_CLIENT_SECRET || "",
-  googleOauthRedirectUrl: process.env.GOOGLE_OAUTH_REDIRECT_URL || "http://localhost:1337/api/sessions/oauth/google",
 };
