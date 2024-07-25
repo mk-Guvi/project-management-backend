@@ -9,10 +9,13 @@ import deserializeUser from "./middleware/deserializeUser";
 
 const app = express();
 
+// Update CORS configuration
 app.use(
   cors({
     origin: config.origin,
     credentials: true,
+    methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],
+    allowedHeaders: ['Content-Type', 'Authorization'],
   })
 );
 
@@ -28,6 +31,9 @@ app.listen(config.port, async () => {
   await connect();
 
   routes(app);
+
+  // Apply deserializeUser after routes
+  app.use(deserializeUser);
 });
 
 export default app;
