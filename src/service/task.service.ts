@@ -93,7 +93,7 @@ export async function getAllTasks({
       totalPages: Math.ceil(totalTasks / limit),
     };
   } catch (error) {
-    console.log(error, "juio");
+    
     throw new Error(`Error fetching tasks`);
   }
 }

@@ -32,10 +32,11 @@ export const accessTokenCookieOptions: CookieOptions = {
   httpOnly: true,
   domain,
   path: "/",
-  sameSite:false,
-  secure: isProduction, // true in production, false in development
+  sameSite: "none",
+  secure: true, // true in production, false in development
 };
-console.log(accessTokenCookieOptions,"accessTokenCookieOptions")
+
+console.log(accessTokenCookieOptions, "accessTokenCookieOptions");
 export const refreshTokenCookieOptions: CookieOptions = {
   ...accessTokenCookieOptions,
   maxAge: 3.154e10, // 1 year
@@ -69,9 +70,9 @@ export async function createUserSessionHandler(req: Request, res: Response) {
 
   // return access & refresh tokens
 
-  res.cookie("accessToken", accessToken, accessTokenCookieOptions);
+  res.cookie(config.accessTokenKey, accessToken, accessTokenCookieOptions);
 
-  res.cookie("refreshToken", refreshToken, refreshTokenCookieOptions);
+  res.cookie(config.refreshTokenKey, refreshToken, refreshTokenCookieOptions);
 
   return res.status(200).json({ type: "success", accessToken, refreshToken });
 }
@@ -92,11 +93,11 @@ export async function deleteSessionHandler(req: Request, res: Response) {
     await updateSession({ _id: sessionId }, { valid: false });
 
     // Clear the cookies
-    res.clearCookie("accessToken", {
+    res.clearCookie(config.accessTokenKey, {
       ...accessTokenCookieOptions,
       maxAge: 0,
     });
-    res.clearCookie("refreshToken", {
+    res.clearCookie(config.refreshTokenKey, {
       ...refreshTokenCookieOptions,
       maxAge: 0,
     });
@@ -123,7 +124,7 @@ export async function googleOauthHandler(req: Request, res: Response) {
   try {
     // get the id and access token with the code
     const { id_token, access_token } = await getGoogleOAuthTokens({ code });
-    console.log({ id_token, access_token });
+    
 
     // get user with tokens
     const googleUser = await getGoogleUser({ id_token, access_token });
@@ -169,9 +170,9 @@ export async function googleOauthHandler(req: Request, res: Response) {
     );
 
     // set cookies
-    res.cookie("accessToken", accessToken, accessTokenCookieOptions);
+    res.cookie(config.accessTokenKey, accessToken, accessTokenCookieOptions);
 
-    res.cookie("refreshToken", refreshToken, refreshTokenCookieOptions);
+    res.cookie(config.refreshTokenKey, refreshToken, refreshTokenCookieOptions);
 
     // redirect back to client
     res.redirect(config.origin);

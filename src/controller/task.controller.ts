@@ -44,7 +44,7 @@ export async function updateTaskHandler(
     const userId = res.locals.user._id;
     const task_id = req.params.taskId;
     const update = req.body;
-console.log({task_id})
+
     const task = await findTask({ task_id });
 
     if (!task) {
@@ -55,7 +55,7 @@ console.log({task_id})
     }
 
     if (String(task.user) !== userId) {
-      return res.status(403).json({
+      return res.status(401).json({
         type: "error",
         message: "Unauthorized",
       });
@@ -123,7 +123,7 @@ export async function deleteTaskHandler(
     }
 
     if (String(task.user) !== userId) {
-      return res.status(403).json({
+      return res.status(401).json({
         type: "error",
         message: "Unauthorized",
       });

@@ -10,30 +10,43 @@ import deserializeUser from "./middleware/deserializeUser";
 const app = express();
 
 // Update CORS configuration
+const allowedOrigins = [
+  "https://project-management-app-sigma-gold.vercel.app",
+  "http://localhost:3000",
+  // add more domains as needed
+];
+
 app.use(
   cors({
-    origin: config.origin,
+    origin: (origin, callback) => {
+      if (!origin || allowedOrigins.includes(origin)) {
+        callback(null, origin || true);
+      } else {
+        callback(new Error('Not allowed by CORS'));
+      }
+    },
     credentials: true,
-    methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],
-    allowedHeaders: ['Content-Type', 'Authorization'],
+ 
   })
 );
 
+app.use((req, res, next) => {
+  const origin = req.headers.origin;
+  if (origin && allowedOrigins.includes(origin)) {
+    res.setHeader('Access-Control-Allow-Origin', origin);
+  }
+  res.setHeader('Access-Control-Allow-Credentials', 'true');
+  next();
+});
+
 app.use(cookieParser());
-
 app.use(express.json());
-
 app.use(deserializeUser);
 
 app.listen(config.port, async () => {
   logger.info(`App is running at ${config.baseUrl}`);
-
   await connect();
-
   routes(app);
-
-  // Apply deserializeUser after routes
-  app.use(deserializeUser);
 });
 
 export default app;

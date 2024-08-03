@@ -4,6 +4,7 @@ import { verifyJwt } from "../utils/jwt.utils";
 import { reIssueAccessToken } from "../service/session.service";
 import { accessTokenCookieOptions } from "../controller/session.controller";
 import logger from "../utils/logger"; // Assuming you have a logger utility
+import config from "../config";
 
 const deserializeUser = async (
   req: Request,
@@ -13,13 +14,14 @@ const deserializeUser = async (
   logger.info("Deserializing user...");
 
   // Check for access token
+  
   const accessToken =
-    get(req, "cookies.accessToken") ||
+    get(req, `cookies.${config.accessTokenKey}`) ||
     get(req, "headers.authorization", "").replace(/^Bearer\s/, "");
 
   // Check for refresh token
   const refreshToken =
-    get(req, "cookies.refreshToken") || get(req, "headers.x-refresh");
+    get(req, `cookies.${config.refreshTokenKey}`) || get(req, "headers.x-refresh");
 
   logger.debug(`Access Token: ${accessToken ? "Present" : "Not present"}`);
   logger.debug(`Refresh Token: ${refreshToken ? "Present" : "Not present"}`);
@@ -32,9 +34,8 @@ const deserializeUser = async (
 
       if (newAccessToken) {
         logger.info("New access token issued");
-        // Set the new access token in headers and cookies
-        res.setHeader("x-access-token", newAccessToken);
-        res.cookie("accessToken", newAccessToken, accessTokenCookieOptions);
+    
+        res.cookie(config.accessTokenKey, newAccessToken, accessTokenCookieOptions);
 
         // Verify the new access token and set user in res.locals
         const { decoded } = verifyJwt(newAccessToken);
@@ -68,9 +69,7 @@ const deserializeUser = async (
 
     if (newAccessToken) {
       logger.info("New access token issued");
-      // Set the new access token in headers and cookies
-      res.setHeader("x-access-token", newAccessToken);
-      res.cookie("accessToken", newAccessToken, accessTokenCookieOptions);
+      res.cookie(config.accessTokenKey, newAccessToken, accessTokenCookieOptions);
 
       // Verify the new access token and set user in res.locals
       const { decoded } = verifyJwt(newAccessToken);

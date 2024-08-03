@@ -42,8 +42,8 @@ export async function createUserHandler(
       );
 
       // Set cookies
-      res.cookie("accessToken", accessToken, accessTokenCookieOptions);
-      res.cookie("refreshToken", refreshToken, refreshTokenCookieOptions);
+      res.cookie(config.accessTokenKey, accessToken, accessTokenCookieOptions);
+      res.cookie(config.refreshTokenKey, refreshToken, refreshTokenCookieOptions);
 
       // Send the response
       return res.status(201).json({
