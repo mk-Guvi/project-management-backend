@@ -9,7 +9,6 @@ import deserializeUser from "./middleware/deserializeUser";
 
 const app = express();
 
-// Update CORS configuration
 const allowedOrigins = [
   "https://project-management-app-sigma-gold.vercel.app",
   "http://localhost:3000",
@@ -22,23 +21,41 @@ app.use(
       if (!origin || allowedOrigins.includes(origin)) {
         callback(null, origin || true);
       } else {
-        callback(new Error('Not allowed by CORS'));
+        callback(new Error("Not allowed by CORS"));
       }
     },
     credentials: true,
- 
+    methods: ["GET", "POST", "PUT", "DELETE", "PATCH", "OPTIONS"],
+    allowedHeaders: [
+      "X-CSRF-Token",
+      "X-Requested-With",
+      "Accept",
+      "Accept-Version",
+      "Content-Length",
+      "Content-MD5",
+      "Content-Type",
+      "Date",
+      "X-Api-Version",
+    ],
   })
 );
 
 app.use((req, res, next) => {
   const origin = req.headers.origin;
   if (origin && allowedOrigins.includes(origin)) {
-    res.setHeader('Access-Control-Allow-Origin', origin);
+    res.setHeader("Access-Control-Allow-Origin", origin);
   }
-  res.setHeader('Access-Control-Allow-Credentials', 'true');
+  res.setHeader("Access-Control-Allow-Credentials", "true");
+  res.setHeader(
+    "Access-Control-Allow-Methods",
+    "GET,DELETE,PATCH,POST,PUT,OPTIONS"
+  );
+  res.setHeader(
+    "Access-Control-Allow-Headers",
+    "X-CSRF-Token, X-Requested-With, Accept, Accept-Version, Content-Length, Content-MD5, Content-Type, Date, X-Api-Version"
+  );
   next();
 });
-
 app.use(cookieParser());
 app.use(express.json());
 app.use(deserializeUser);
