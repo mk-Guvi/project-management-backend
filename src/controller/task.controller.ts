@@ -103,10 +103,15 @@ export async function deleteTaskHandler(
   res: Response
 ) {
   try {
-    
+    const userId = res.locals.user._id;
     const task_id = req.params.taskId;
-
-    const task = await findTask({ task_id });
+    if (!userId) {
+      return res.status(404).json({
+        type: "error",
+        message: "User not found",
+      });
+    }
+    const task = await findTask({ task_id, user: userId });
 
     if (!task) {
       return res.status(404).json({
