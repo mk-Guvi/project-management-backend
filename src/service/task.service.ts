@@ -47,6 +47,7 @@ export async function getAllTasks({
   page = 1,
   limit = 10,
   status,
+  userId,
 }: {
   search?: string;
   sortBy?: "created_at" | "updated_at";
@@ -54,8 +55,11 @@ export async function getAllTasks({
   page?: number;
   limit?: number;
   status?: TaskStatus;
+  userId: string;
 }) {
-  const query: FilterQuery<TaskDocument> = {};
+  const query: FilterQuery<TaskDocument> = {
+    user: userId,
+  };
 
   // Search functionality
   if (search) {
@@ -93,7 +97,6 @@ export async function getAllTasks({
       totalPages: Math.ceil(totalTasks / limit),
     };
   } catch (error) {
-    
     throw new Error(`Error fetching tasks`);
   }
 }

@@ -103,15 +103,10 @@ export async function deleteTaskHandler(
   res: Response
 ) {
   try {
-    const userId = res.locals.user._id;
+    
     const task_id = req.params.taskId;
-    if (!userId) {
-      return res.status(404).json({
-        type: "error",
-        message: "User not found",
-      });
-    }
-    const task = await findTask({ task_id, user: userId });
+    
+    const task = await findTask({ task_id, });
 
     if (!task) {
       return res.status(404).json({
@@ -137,7 +132,13 @@ export async function deleteTaskHandler(
 export async function getAllTasksHandler(req: Request, res: Response) {
   try {
     const { search, sortBy, page, limit, status } = req.query;
-
+    const userId = res.locals.user._id;
+    if (!userId) {
+      return res.status(404).json({
+        type: "error",
+        message: "User not found",
+      });
+    }
     const result = await getAllTasks({
       search: search as string,
       sortBy: sortBy as "created_at" | "updated_at",
@@ -145,6 +146,8 @@ export async function getAllTasksHandler(req: Request, res: Response) {
       page: page ? parseInt(page as string) : undefined,
       limit: limit ? parseInt(limit as string) : undefined,
       status: status as TaskStatus,
+      userId
+      
     });
     return res.json({
       type: "success",
