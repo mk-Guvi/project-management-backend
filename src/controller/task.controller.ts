@@ -54,14 +54,7 @@ export async function updateTaskHandler(
       });
     }
 
-    if (String(task.user) !== userId) {
-      return res.status(401).json({
-        type: "error",
-        message: "Unauthorized",
-      });
-    }
-
-    const updatedTask = await findAndUpdateTask({ task_id:task_id }, update, {
+    const updatedTask = await findAndUpdateTask({ task_id: task_id }, update, {
       new: false,
     });
 
@@ -110,7 +103,7 @@ export async function deleteTaskHandler(
   res: Response
 ) {
   try {
-    const userId = res.locals.user._id;
+    
     const task_id = req.params.taskId;
 
     const task = await findTask({ task_id });
@@ -119,13 +112,6 @@ export async function deleteTaskHandler(
       return res.status(404).json({
         type: "error",
         message: "Task not found",
-      });
-    }
-
-    if (String(task.user) !== userId) {
-      return res.status(401).json({
-        type: "error",
-        message: "Unauthorized",
       });
     }
 
@@ -145,13 +131,7 @@ export async function deleteTaskHandler(
 
 export async function getAllTasksHandler(req: Request, res: Response) {
   try {
-    const {
-      search,
-      sortBy,
-      page,
-      limit,
-      status,
-    } = req.query;
+    const { search, sortBy, page, limit, status } = req.query;
 
     const result = await getAllTasks({
       search: search as string,
