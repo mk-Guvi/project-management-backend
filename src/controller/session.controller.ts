@@ -30,7 +30,7 @@ const domain = process.env.COOKIE_DOMAIN || "localhost";
 export const accessTokenCookieOptions: CookieOptions = {
   maxAge: 900000, // 15 mins
   httpOnly: true,
-  domain,
+  // domain,
   path: "/",
   sameSite: "none",
   secure: true, // true in production, false in development
@@ -124,7 +124,6 @@ export async function googleOauthHandler(req: Request, res: Response) {
   try {
     // get the id and access token with the code
     const { id_token, access_token } = await getGoogleOAuthTokens({ code });
-    
 
     // get user with tokens
     const googleUser = await getGoogleUser({ id_token, access_token });
