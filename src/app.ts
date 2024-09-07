@@ -12,6 +12,7 @@ const app = express();
 const allowedOrigins = [
   "https://project-management-app-sigma-gold.vercel.app",
   "http://localhost:3000",
+  "https://project-management-app-mieh.onrender.com"
   // add more domains as needed
 ];
 
