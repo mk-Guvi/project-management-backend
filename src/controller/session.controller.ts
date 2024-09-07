@@ -48,7 +48,7 @@ export async function createUserSessionHandler(req: Request, res: Response) {
 
   if (!user) {
     return res
-      .status(401)
+      .status(400)
       .json({ message: "Invalid email or password", type: "error" });
   }
 
